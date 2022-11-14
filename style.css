@@ -4,3 +4,7 @@
     grid-template-rows: repeat(4, 30px);
     gap: 10px;
 }
+
+button {
+    margin: 30px;
+}
