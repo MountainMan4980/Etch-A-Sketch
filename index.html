@@ -4,45 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css"
+    <link rel="stylesheet" href="style.css">
     <title>Etch-A-Sketch</title>
 </head>
 <body>
+    <button id="newgridbutton">new grid</button>
    <div id="container"></div>
-   <button id="newgridbutton">new grid</button>
    <script>
-        function createDivs (numberOfDivs) {
+        function createDivs (numberOfDivs = 16) {
+            sideDimension = Math.sqrt(numberOfDivs);
             let divsArray = [];
             const container = document.querySelector('#container');
+            container.style.gridTemplateRows = `repeat(${sideDimension}, ${500 / sideDimension - ((sideDimension - 1) * 10 / sideDimension )}px)`;
+            container.style.gridTemplateColumns = `repeat(${sideDimension}, ${500 / sideDimension - ((sideDimension - 1) * 10 / sideDimension )}px)`;
             for (let i = 0; i < numberOfDivs; i++) {
                 let div = document.createElement('div');
-                div.style.backgroundColor = "#D3D3D3"
-                div.style.width = "30px";
-                div.style.height = "30px";
+                div.id = `square${i+1}`
+                div.style.backgroundColor = "#D3D3D3";
                 div.classList.add('square')
                 divsArray.push(div);
+                console.log(div.id)
             }
             for (let j = 0; j < divsArray.length; j++) {
                 container.appendChild(divsArray[j])
             }
+            const squareDivs = document.querySelectorAll('.square');
+            squareDivs.forEach((div) => {
+                div.addEventListener('mouseover', function(e) {
+                    e.target.style.backgroundColor = "#5A5A5A";
+                })
+            });
+            return divsArray
         }
-        function newGrid() {
-            const grid = document.querySelector("#newgridbutton");
-            grid.addEventListener("click", function() {
-                let squareCount = prompt("how many squares would you like? ")
-            })
+        function newGrid(divsToRemove) {
             
-        }
-        createDivs(16)
-        newGrid()
-        
-
-        const squareDivs = document.querySelectorAll('.square');
-        squareDivs.forEach((div) => {
-            div.addEventListener('mouseover', function(e) {
-                e.target.style.backgroundColor = "#5A5A5A";
+            let grid = document.querySelector("#newgridbutton");
+            let squareCount;
+            const container = document.querySelector('#container')
+            grid.addEventListener("click", function() {
+                squareCount = parseInt(prompt("how many squares would you like? "));
+                for (let i = 0; i < divsToRemove.length; i++) {
+                    container.removeChild(divsToRemove[i])
+                }
+                createDivs(squareCount)
             })
-        })
+        }
+        let original = createDivs();
+        newGrid(original);
    </script>
 
 </body>
